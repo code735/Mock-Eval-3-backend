@@ -15,7 +15,7 @@ const mongoURI = process.env.MONGO_URI;
 
 mongoose
   .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to Atlas boi'))
+  .then(() => console.log('Connected to Atlas'))
   .catch((error) => console.log(error));
 
 const userSchema = new mongoose.Schema({
@@ -145,7 +145,20 @@ app.put('/employees/:id', async (req, res) => {
   }
 });
 
+app.delete('/employees/:id', async (req, res) => {
+  try {
+    const employeeId = req.params.id;
 
+    const employee = await Employee.findByIdAndDelete(employeeId);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    res.status(200).json({ message: 'Employee deleted' });
+  } catch (error) {
+    res.status(500).json({ message: 'error' });
+  }
+});
 
 // employees -----------------------------------
 
