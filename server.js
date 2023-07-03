@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 app.get('/',(req,res)=>{
-  res.send("Hello how r u Im under the warer")
+  res.send("Hello this is test route")
 })
 
 app.post('/signup', async (req, res) => {
