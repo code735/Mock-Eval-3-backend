@@ -121,6 +121,30 @@ app.post('/employees', async (req, res) => {
   }
 });
 
+app.put('/employees/:id', async (req, res) => {
+  try {
+    const { firstName, lastName, email, department, salary } = req.body;
+    const employeeId = req.params.id;
+
+    const employee = await Employee.findById(employeeId);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    employee.firstName = firstName;
+    employee.lastName = lastName;
+    employee.email = email;
+    employee.department = department;
+    employee.salary = salary;
+
+    await employee.save();
+
+    res.status(200).json({ message: 'Employee updated' });
+  } catch (error) {
+    res.status(500).json({ message: 'error' });
+  }
+});
+
 
 
 // employees -----------------------------------
