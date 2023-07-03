@@ -23,12 +23,24 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
+
+const employeeSchema = new mongoose.Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true },
+  department: { type: String, required: true },
+  salary: { type: Number, required: true },
+});
+
+const Employee = mongoose.model('Employee', employeeSchema);
 const User = mongoose.model('User', userSchema);
 
 app.get('/',(req,res)=>{
   res.send("Hello this is test route")
 })
 
+
+// sign in --------------------------------
 app.post('/signup', async (req, res) => {
   try {
     const { email, password, confirmPassword } = req.body;
@@ -75,6 +87,43 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ message: 'error' });
   }
 });
+
+// sign in --------------------------------
+
+// employees -----------------------------------
+
+app.get('/employees', async (req, res) => {
+  try {
+    const employees = await Employee.find();
+    res.status(200).json(employees);
+  } catch (error) {
+    res.status(500).json({ message: 'error' });
+  }
+});
+
+app.post('/employees', async (req, res) => {
+  try {
+    const { firstName, lastName, email, department, salary } = req.body;
+
+    const newEmployee = new Employee({
+      firstName,
+      lastName,
+      email,
+      department,
+      salary,
+    });
+
+    await newEmployee.save();
+
+    res.status(201).json({ message: 'Employee added' });
+  } catch (error) {
+    res.status(500).json({ message: 'error' });
+  }
+});
+
+
+
+// employees -----------------------------------
 
 
 // const crypto = require('crypto');
